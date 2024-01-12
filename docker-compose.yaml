@@ -1,0 +1,45 @@
+version: "3.9"
+
+services:
+  db:
+    image: nefeloma/psql-pgbackrest:latest
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./.docker/psql:/usr/local/pgsql/data
+      - ./pgbackrest:/etc/pgbackrest-template
+      - ./.docker/pgbackrest/logs:/var/log/pgbackrest
+    environment:
+      - S3_BUCKET
+      - S3_ENDPOINT
+      - S3_KEY
+      - S3_KEY_SECRET
+      - S3_REGION
+      - CIPHER_PASS
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    logging:
+      driver: local
+      options:
+        max-size: "1g"
+        max-file: "2"
+    command:
+      - postgres
+    restart: always
+  restore:
+    image: nefeloma/psql-pgbackrest:latest
+    volumes:
+      - ./.docker/psql:/usr/local/pgsql/data
+      - ./pgbackrest:/etc/pgbackrest-template
+      - ./.docker/pgbackrest/logs:/var/log/pgbackrest
+    environment:
+      - RECOVERY=true
+    logging:
+      driver: local
+      options:
+        max-size: "1g"
+        max-file: "2"
+    stop_signal: SIGKILL
+    command:
+      - postgres
+    restart: no
