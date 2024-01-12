@@ -12,6 +12,7 @@ restore_backup() {
     local restore_id=$1
     docker compose stop db
     docker compose start recovery
+    docker compose exec recovery rm -f /usr/local/pgsql/data/postmaster.pid
     docker compose exec recovery pgbackrest --stanza=app --log-level-console=info --delta --set=$restore_id restore
     docker compose stop recovery
     docker compose start db

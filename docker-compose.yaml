@@ -8,6 +8,7 @@ services:
     volumes:
       - ./.docker/psql:/usr/local/pgsql/data
       - ./pgbackrest:/etc/pgbackrest-template
+      - ./.docker/pgbackrest/etc:/etc/pgbackrest
       - ./.docker/pgbackrest/logs:/var/log/pgbackrest
     environment:
       - S3_BUCKET
@@ -26,11 +27,12 @@ services:
     command:
       - postgres
     restart: always
-  restore:
+  recovery:
     image: nefeloma/psql-pgbackrest:latest
     volumes:
       - ./.docker/psql:/usr/local/pgsql/data
       - ./pgbackrest:/etc/pgbackrest-template
+      - ./.docker/pgbackrest/etc:/etc/pgbackrest
       - ./.docker/pgbackrest/logs:/var/log/pgbackrest
     environment:
       - RECOVERY=true
