@@ -87,7 +87,7 @@ RUN sed -i "$ a max_wal_senders = 3" /usr/local/pgsql/share/postgresql.conf.samp
 RUN sed -i "$ a log_line_prefix = ''" /usr/local/pgsql/share/postgresql.conf.sample
 RUN sed -i "$ a log_timezone = 'Etc/UTC'" /usr/local/pgsql/share/postgresql.conf.sample
 
-RUN sed -i "$ a host all all all trust" /usr/local/pgsql/share/pg_hba.conf.sample
+RUN sed -i "$ a host all all all md5" /usr/local/pgsql/share/pg_hba.conf.sample
 
 ENV PATH=/usr/local/pgsql/bin:$PATH
 

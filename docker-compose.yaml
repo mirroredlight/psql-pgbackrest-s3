@@ -3,6 +3,7 @@ version: "3.9"
 services:
   db:
     image: nefeloma/psql-pgbackrest:latest
+    pull_policy: always
     ports:
       - "5432:5432"
     volumes:
